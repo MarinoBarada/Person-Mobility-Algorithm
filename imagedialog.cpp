@@ -7,11 +7,11 @@ ImageDialog::ImageDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    CustomLabel *customLabel = new CustomLabel(ui->image);
+    CustomLabel *custom_label = new CustomLabel(ui->image);
 
-    customLabel->setImage("C:/Users/MarinoBarada/Documents/PMA_app/test.png" , ui->image->width(), ui->image->height());
+    custom_label->setImage("C:/Users/MarinoBarada/Documents/PMA_app/image.png" , ui->image->width(), ui->image->height());
 
-    ui->timeLabel->setText("Vrijeme izvedbe:: " + formatElapsedTime(elapsed));
+    ui->timeLabel->setText("Vrijeme izvođenja: " + formatElapsedTime(g_elapsed));
 }
 
 ImageDialog::~ImageDialog()
@@ -21,12 +21,12 @@ ImageDialog::~ImageDialog()
 
 QString ImageDialog::formatElapsedTime(qint64 milliseconds) {
     if (milliseconds < 1000) {
-        return QString::number(milliseconds) + " millisekunda";
+        return QString::number(milliseconds) + " millisekundi";
     } else if (milliseconds < 60000) {
         double seconds = milliseconds / 1000.0;
-        return QString::number(seconds, 'f', 2) + " sekunda";
+        return QString::number(seconds, 'f', 2) + " sekundi";
     } else {
         double minutes = milliseconds / 60000.0;
-        return QString::number(minutes, 'f', 2) + " minuta";
+        return QString::number(minutes, 'f', 2) + " minuti";
     }
 }

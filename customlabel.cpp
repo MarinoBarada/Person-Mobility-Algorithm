@@ -1,4 +1,3 @@
-// customlabel.cpp
 #include "customlabel.h"
 
 CustomLabel::CustomLabel(QWidget *parent) : QLabel(parent)
@@ -10,111 +9,106 @@ void CustomLabel::paintEvent(QPaintEvent *event)
     QLabel::paintEvent(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    double cellSize = qMin(width(), height()) / REZOLUTION;
+    double cell_size = qMin(width(), height()) / g_grid_rezolution;
 
     painter.setPen(Qt::transparent);
-    for (int x = 0; x < REZOLUTION; ++x)
-    {
-        for (int y = 0; y < REZOLUTION; ++y)
-        {
-            painter.drawRect(x * cellSize, y * cellSize, cellSize, cellSize);
+    for (int x = 0; x < g_grid_rezolution; ++x) {
+        for (int y = 0; y < g_grid_rezolution; ++y) {
+            painter.drawRect(x * cell_size, y * cell_size, cell_size, cell_size);
         }
     }
 
-    painter.setBrush(Qt::red);
-    for (const auto &segment : Ein)
-    {
-        painter.drawRect(segment.y * cellSize, segment.x * cellSize, cellSize, cellSize);
+    painter.setBrush(QColor(255, 0, 0, 89));
+    for (const auto &segment : e_in) {
+        painter.drawRect(segment.y_coordinates * cell_size, segment.x_coordinates * cell_size, cell_size, cell_size);
     }
+
+    QPoint center(width() / 2, height() / 2);
+    double radius = (400.0 / 10000.0) * g_nmax * g_grid_cell_size;
+    painter.setPen(QColor(255, 0, 0, 127));
+    painter.setBrush(Qt::transparent);
+    painter.drawEllipse(center, radius, radius);
 }
 
-void CustomLabel::setImage(const QString &filePath, int width, int height)
+void CustomLabel::setImage(const QString &file_path, int width, int height)
 {
     QElapsedTimer timer;
     timer.start();
-    pixmap.load(filePath);
+    pixmap.load(file_path);
     setPixmap(pixmap.scaled(width, height));
-    Ein.push_back(Segment(IPP_COORDINATES, IPP_COORDINATES, 0));
+    e_in.push_back(Segment(ipp_coordinates, ipp_coordinates, 0));
     algorithmPMA();
     update();
-    elapsed = timer.elapsed();
+    g_elapsed = timer.elapsed();
 }
 
-bool CustomLabel::segmentExist(const QVector<Segment> &EInOut, int x, int y)
+bool CustomLabel::segmentExist(const QVector<Segment> &e_in_out, int x_coordinates, int y_coordinates)
 {
-    for (const auto &item : EInOut)
-    {
-        if (item.x == x && item.y == y)
+    for (const auto &segment : e_in_out) {
+        if (segment.x_coordinates == x_coordinates && segment.y_coordinates == y_coordinates)
             return true;
     }
     return false;
 }
 
-void CustomLabel::minPossibility()
+void CustomLabel::getClosestSegmentToIPP()
 {
-    auto minPossibilitySegment = min_element(Eout.begin(), Eout.end(),[](const Segment &a, const Segment &b){ return a.possibility < b.possibility;});
-    int minIndex = distance(Eout.begin(), minPossibilitySegment);
+    if (!e_out.empty()) {
+        auto closestSegment = min_element(e_out.begin(), e_out.end(), [](const Segment &a, const Segment &b) {
+            return a.n < b.n;
+        });
 
-    if (minPossibilitySegment->possibility >= nmax)
-    {
-        ALGORITAM_CONTINUE = false;
-    }
-    else
-    {
-        Ein.push_back(Segment(minPossibilitySegment->x, minPossibilitySegment->y, minPossibilitySegment->possibility));
-        Eout.erase(Eout.begin() + minIndex);
+        if (closestSegment != e_out.end()) {
+            int minIndex = distance(e_out.begin(), closestSegment);
+
+            if (closestSegment->n > g_nmax) {
+                algoritam_continue = false;
+            } else {
+                e_in.push_back(Segment(closestSegment->x_coordinates, closestSegment->y_coordinates, closestSegment->n));
+                e_out.erase(e_out.begin() + minIndex);
+            }
+        }
+    } else {
+        algoritam_continue = false;
     }
 }
 
 void CustomLabel::algorithmPMA()
 {
-    for (size_t segment = 0; segment < Ein.size(); ++segment)
-    {
-        auto &itemIn = Ein[segment];
+    for (size_t segment_index = 0; segment_index < e_in.size(); ++segment_index) {
+        auto &segment_in = e_in[segment_index];
 
-        int rows = possibilityMatrix.size();
-        int cols = possibilityMatrix[0].size();
-        for (int i = max(0, itemIn.x - 1); i <= min(rows - 1, itemIn.x + 1); ++i)
-        {
-            for (int j = max(0, itemIn.y - 1); j <= min(cols - 1, itemIn.y + 1); ++j)
-            {
-                if (i == itemIn.x && j == itemIn.y)
+        int rows = g_passability_matrix.size();
+        int cols = g_passability_matrix[0].size();
+        for (int i = max(0, segment_in.x_coordinates - 1); i <= min(rows - 1, segment_in.x_coordinates + 1); ++i) {
+            for (int j = max(0, segment_in.y_coordinates - 1); j <= min(cols - 1, segment_in.y_coordinates + 1); ++j) {
+                if (i == segment_in.x_coordinates && j == segment_in.y_coordinates)
                     continue;
 
-                if (segmentExist(Ein, i, j))
+                if (segmentExist(e_in, i, j))
                     continue;
 
-                double n;
-                if (i == itemIn.x || j == itemIn.y)
-                {
-                    n = itemIn.possibility + possibilityMatrix[i][j];
-                }
-                else
-                {
-                    n = itemIn.possibility + sqrt(2) * possibilityMatrix[i][j];
-                }
+                double n = (i == segment_in.x_coordinates || j == segment_in.y_coordinates)
+                               ? segment_in.n + g_passability_matrix[i][j]
+                               : segment_in.n + sqrt(2) * g_passability_matrix[i][j];
 
-                if (segmentExist(Eout, i, j))
-                {
-                    for (auto &item : Eout)
-                    {
-                        if (item.x == i && item.y == j)
-                        {
-                            if (n < item.possibility)
-                                item.possibility = n;
-                            break;
-                        }
+                bool in_e_out = false;
+                for (auto &segment : e_out) {
+                    if (segment.x_coordinates == i && segment.y_coordinates == j) {
+                        in_e_out = true;
+                        segment.n = std::min(segment.n, n);
+                        break;
                     }
                 }
-                else
-                {
-                    Eout.push_back(Segment(i, j, n));
+
+                if (!in_e_out) {
+                    e_out.emplace_back(i, j, n);
                 }
             }
         }
-        minPossibility();
+        getClosestSegmentToIPP();
 
-        if (!ALGORITAM_CONTINUE; REZOLUTION * REZOLUTION == Ein.size())
+        if (!algoritam_continue; g_grid_rezolution * g_grid_rezolution == e_in.size())
             break;
     }
 }

@@ -1,8 +1,5 @@
 #ifndef CUSTOMLABEL_H
 #define CUSTOMLABEL_H
-#include <QLabel>
-#include <QPainter>
-#include <QVector>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -10,7 +7,10 @@
 #include <algorithm>
 #include <chrono>
 #include <QElapsedTimer>
+#include <QLabel>
 #include <QPainter>
+#include <QVector>
+#include <QDebug>
 #include "globals.h"
 
 using namespace std;
@@ -18,28 +18,30 @@ using namespace std;
 typedef QVector<QVector<double>> Matrix;
 
 struct Segment {
-    int x;
-    int y;
-    double possibility;
+    int x_coordinates;
+    int y_coordinates;
+    double n;
 
-    Segment(int _x, int _y, double _possibility)
-        : x(_x), y(_y), possibility(_possibility) {}
+    Segment() : x_coordinates(0), y_coordinates(0), n(0.0) {}
+
+    Segment(int _x_coordinates, int _y_coordinates, double _n)
+        : x_coordinates(_x_coordinates), y_coordinates(_y_coordinates), n(_n) {}
 };
 
 class CustomLabel : public QLabel
 {
     Q_OBJECT
 public:
-    int IPP_COORDINATES = REZOLUTION / 2;
-    bool ALGORITAM_CONTINUE = true;
-    Matrix initialize_matrix = possibilityMatrix;
+    int ipp_coordinates = g_grid_rezolution / 2;
+    bool algoritam_continue = true;
+    Matrix initialize_matrix = g_passability_matrix;
 
     explicit CustomLabel(QWidget *parent = nullptr);
 
 
-    void setImage(const QString &filePath, int width, int height);
-    bool segmentExist(const QVector<Segment> &EInOut, int x, int y);
-    void minPossibility();
+    void setImage(const QString &file_path, int width, int height);
+    bool segmentExist(const QVector<Segment> &e_in_out, int x_coordinates, int y_coordinates);
+    void getClosestSegmentToIPP();
     void algorithmPMA();
 
 protected:
@@ -47,8 +49,8 @@ protected:
 
 private:
     QPixmap pixmap;
-    QVector<Segment> Ein;
-    QVector<Segment> Eout;
+    QVector<Segment> e_in;
+    QVector<Segment> e_out;
 };
 
 #endif

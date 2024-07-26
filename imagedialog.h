@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::ImageDialog *ui;
-    CustomLabel *customLabel;
+    CustomLabel *custom_label;
 };
 
 #endif
