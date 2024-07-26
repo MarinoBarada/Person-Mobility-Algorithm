@@ -27,9 +27,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    ImageDialog *imageDialog;
-    double personCategoryFactor;
-    int timeInterval = 0;
+    ImageDialog *image_dialog;
+    double person_category_factor;
+    int time_tnterval = 0;
     double faktor = 1;
 
 };

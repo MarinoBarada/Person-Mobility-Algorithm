@@ -30,25 +30,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    double v = v_average * personCategoryFactor * faktor;
-    double sMax = v * timeInterval;
-    nmax= sMax / resolution_of_the_grid;
+    double v = G_V_AVERAGE  * person_category_factor * faktor;
+    double s_max = v * time_tnterval;
+    g_nmax= s_max / g_grid_cell_size;
 
-    ImageDialog imageDialog;
-    imageDialog.setModal(true);
-    imageDialog.exec();
+    ImageDialog image_dialog;
+    image_dialog.setModal(true);
+    image_dialog.exec();
 }
 
 
 void MainWindow::on_category_dropdown_currentTextChanged(const QString &option)
 {
-    personCategoryFactor =  ui->category_dropdown->currentData().toDouble();
+    person_category_factor =  ui->category_dropdown->currentData().toDouble();
 }
 
 
 void MainWindow::on_timeEdit_userTimeChanged(const QTime &time)
 {
-    timeInterval  = time.hour() * 3600 + time.minute() * 60 + time.second();
+    time_tnterval  = time.hour() * 3600 + time.minute() * 60 + time.second();
 }
 
 
@@ -63,24 +63,24 @@ void MainWindow::on_segment_size_dropdown_currentTextChanged(const QString &opti
 {
     switch (ui->segment_size_dropdown->currentData().toInt()) {
         case 50:
-            resolution_of_the_grid=50;
-            possibilityMatrix=twoHundredMatrix;
-            REZOLUTION = 10000/resolution_of_the_grid;
+            g_grid_cell_size=50;
+            g_possibility_matrix=G_TWO_HUNDRED_MATRIX;
+            g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         case 100:
-            resolution_of_the_grid=100;
-            possibilityMatrix=hundredMatrix;
-            REZOLUTION = 10000/resolution_of_the_grid;
+            g_grid_cell_size=100;
+            g_possibility_matrix=G_HUNDRED_MATRIX;
+            g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         case 200:
-            resolution_of_the_grid=200;
-            possibilityMatrix=fiftyMatrix;
-            REZOLUTION = 10000/resolution_of_the_grid;
+            g_grid_cell_size=200;
+            g_possibility_matrix=G_FIFTY_MATRIX;
+            g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         default:
-            resolution_of_the_grid=200;
-            possibilityMatrix=fiftyMatrix;
-            REZOLUTION = 10000/resolution_of_the_grid;
+            g_grid_cell_size=200;
+            g_possibility_matrix=G_FIFTY_MATRIX;
+            g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         }
 }
