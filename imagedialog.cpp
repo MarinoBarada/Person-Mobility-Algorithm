@@ -9,7 +9,7 @@ ImageDialog::ImageDialog(QWidget *parent) :
 
     CustomLabel *customLabel = new CustomLabel(ui->image);
 
-    customLabel->setImage("C:/Users/MarinoBarada/Documents/PMA_app/test.png" , ui->image->width(), ui->image->height());
+    customLabel->setImage("C:/Users/MarinoBarada/Documents/PMA_app/image.png" , ui->image->width(), ui->image->height());
 
     ui->timeLabel->setText("Vrijeme izvedbe:: " + formatElapsedTime(elapsed));
 }

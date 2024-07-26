@@ -26,6 +26,12 @@ void CustomLabel::paintEvent(QPaintEvent *event)
     {
         painter.drawRect(segment.y * cellSize, segment.x * cellSize, cellSize, cellSize);
     }
+
+    QPoint center(width() / 2, height() / 2);
+    double radius = (400.0 / 10000.0) * nmax * resolution_of_the_grid;
+    painter.setPen(Qt::red);
+    painter.setBrush(Qt::transparent);
+    painter.drawEllipse(center, radius, radius);
 }
 
 void CustomLabel::setImage(const QString &filePath, int width, int height)
