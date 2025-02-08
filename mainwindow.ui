@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item alignment="Qt::AlignHCenter">
+    <item alignment="Qt::AlignmentFlag::AlignHCenter">
      <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
@@ -24,10 +24,10 @@
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Shape::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="geometry">
@@ -118,7 +118,7 @@ QPushButton:hover {
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Kategorija nestale osobe:</string>
+            <string>Kategorija osobe:</string>
            </property>
           </widget>
          </item>
@@ -150,7 +150,7 @@ QPushButton:hover {
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Vremensko razdoblje nestanka:</string>
+            <string>Vremenski interval:</string>
            </property>
           </widget>
          </item>
@@ -225,7 +225,7 @@ QSlider::handle:horizontal {
             <number>100</number>
            </property>
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -270,7 +270,7 @@ QSlider::handle:horizontal {
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Površina segmenta u m2:</string>
+            <string>Veličina segmenta:</string>
            </property>
           </widget>
          </item>

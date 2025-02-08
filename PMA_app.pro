@@ -25,6 +25,11 @@ FORMS += \
     imagedialog.ui \
     mainwindow.ui
 
+LIBS += "/Program Files (x86)/OCL_SDK_Light/lib/x86/opencl.lib"
+LIBS += "/Program Files (x86)/OCL_SDK_Light/lib/x86_64/opencl.lib"
+
+INCLUDEPATH += "/Program Files (x86)/OCL_SDK_Light/include"
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

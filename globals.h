@@ -13,7 +13,7 @@ extern const double G_V_AVERAGE;
 extern int g_grid_rezolution;
 extern int g_grid_cell_size;
 extern qint64 g_elapsed;
-extern Matrix g_possibility_matrix;
+extern Matrix g_passability_matrix;
 extern const Matrix G_TWO_HUNDRED_MATRIX;
 extern const Matrix G_HUNDRED_MATRIX;
 extern const Matrix G_FIFTY_MATRIX;
