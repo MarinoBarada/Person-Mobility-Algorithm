@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QDebug>
 #include "globals.h"
+#include <omp.h>
 
 using namespace std;
 
@@ -20,12 +21,12 @@ typedef QVector<QVector<double>> Matrix;
 struct Segment {
     int x_coordinates;
     int y_coordinates;
-    double possibility;
+    double n;
 
-    Segment() : x_coordinates(0), y_coordinates(0), possibility(0.0) {}
+    Segment() : x_coordinates(0), y_coordinates(0), n(0.0) {}
 
-    Segment(int _x_coordinates, int _y_coordinates, double _possibility)
-        : x_coordinates(_x_coordinates), y_coordinates(_y_coordinates), possibility(_possibility) {}
+    Segment(int _x_coordinates, int _y_coordinates, double _n)
+        : x_coordinates(_x_coordinates), y_coordinates(_y_coordinates), n(_n) {}
 };
 
 class CustomLabel : public QLabel
@@ -34,14 +35,14 @@ class CustomLabel : public QLabel
 public:
     int ipp_coordinates = g_grid_rezolution / 2;
     bool algoritam_continue = true;
-    Matrix initialize_matrix = g_possibility_matrix;
+    Matrix initialize_matrix = g_passability_matrix;
 
     explicit CustomLabel(QWidget *parent = nullptr);
 
 
     void setImage(const QString &file_path, int width, int height);
     bool segmentExist(const QVector<Segment> &e_in_out, int x_coordinates, int y_coordinates);
-    void minPossibility();
+    void getClosestSegmentToIPP();
     void algorithmPMA();
 
 protected:
