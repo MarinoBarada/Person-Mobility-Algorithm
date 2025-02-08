@@ -64,22 +64,22 @@ void MainWindow::on_segment_size_dropdown_currentTextChanged(const QString &opti
     switch (ui->segment_size_dropdown->currentData().toInt()) {
         case 50:
             g_grid_cell_size=50;
-            g_possibility_matrix=G_TWO_HUNDRED_MATRIX;
+            g_passability_matrix=G_TWO_HUNDRED_MATRIX;
             g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         case 100:
             g_grid_cell_size=100;
-            g_possibility_matrix=G_HUNDRED_MATRIX;
+            g_passability_matrix=G_HUNDRED_MATRIX;
             g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         case 200:
             g_grid_cell_size=200;
-            g_possibility_matrix=G_FIFTY_MATRIX;
+            g_passability_matrix=G_FIFTY_MATRIX;
             g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         default:
             g_grid_cell_size=200;
-            g_possibility_matrix=G_FIFTY_MATRIX;
+            g_passability_matrix=G_FIFTY_MATRIX;
             g_grid_rezolution = 10000/g_grid_cell_size;
             break;
         }
